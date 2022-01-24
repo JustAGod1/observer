@@ -1,0 +1,19 @@
+services:
+  db:
+    image: mysql
+    ports:
+      - 3307:3306
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.5
+    environment:
+      MYSQL_ROOT_PASSWORD: qwerty
+    volumes:
+      - /var/lib/mysql
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1

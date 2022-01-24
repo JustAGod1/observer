@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="BotLocal" type="JetRunConfigurationType">
+    <envs>
+      <env name="BOT_TOKEN" value="OTM1MTU1MzAzMjUzNjgwMTYw.Ye6hPg.zPorJtMhdNXlpobUBt0acBRhgH8" />
+      <env name="GUILD_ID" value="935147865192431696" />
+      <env name="TECH_SUPPORT_CHANNEL" value="935148040493355080" />
+      <env name="TECH_SUPPORT_MESSAGE" value="935158733993041950" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="ru.justagod.observer.Main" />
+    <module name="observer.main" />
+    <shortenClasspath name="NONE" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
