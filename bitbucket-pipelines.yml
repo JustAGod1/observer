@@ -12,15 +12,16 @@ pipelines:
     - parallel:
       - step:
           name: Build and Test
-          caches:
-            - gradle
           script:
-            - gradle build
+            - gradle build unpackDist
+            - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+            - docker build -t observer/$BITBUCKET_BUILD_NUMBER
+            - docker push observer/$BITBUCKET_BUILD_NUMBER
           after-script:
             - pipe: atlassian/checkstyle-report:0.3.0
+          services:
+            - docker
       - step:
           name: Security Scan
           script:
-            # Run a security scan for sensitive data.
-            # See more security tools at https://bitbucket.org/product/features/pipelines/integrations?&category=security
             - pipe: atlassian/git-secrets-scan:0.5.1
