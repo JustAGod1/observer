@@ -2,6 +2,8 @@ package ru.justagod.observer
 
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
+import net.dv8tion.jda.api.OnlineStatus
+import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -35,10 +37,11 @@ object Main {
 
         logger = Logger.getLogger("Main")
         logger.level = Level.ALL
-        logger.addHandler(object:StreamHandler(System.out,  SimpleFormatter()) {
+        logger.addHandler(object : StreamHandler(System.out, SimpleFormatter()) {
             init {
                 level = Level.ALL
             }
+
             override fun publish(record: LogRecord?) {
                 super.publish(record)
                 flush()
@@ -60,8 +63,10 @@ object Main {
 
         val token = System.getenv("BOT_TOKEN")!!
 
-        jda  = JDABuilder.createDefault(token)
+        jda = JDABuilder.createDefault(token)
             .build()
+
+        jda.presence.setPresence(OnlineStatus.ONLINE, Activity.streaming("", "https://github.com/JustAGod1/observer"))
 
         jda.addEventListener(object : ListenerAdapter() {
             override fun onReady(event: ReadyEvent) {
