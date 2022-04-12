@@ -3,8 +3,9 @@
     <envs>
       <env name="BOT_TOKEN" value="OTM1MTU1MzAzMjUzNjgwMTYw.Ye6hPg.zPorJtMhdNXlpobUBt0acBRhgH8" />
       <env name="GUILD_ID" value="935147865192431696" />
-      <env name="TECH_SUPPORT_CHANNEL" value="935148040493355080" />
-      <env name="TECH_SUPPORT_MESSAGE" value="935158733993041950" />
+      <env name="DATABASE_URL" value="jdbc:mysql://10.5.0.5:3306/bot" />
+      <env name="DATABASE_USER" value="root" />
+      <env name="DATABASE_PASSWORD" value="qwerty" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="ru.justagod.observer.Main" />
     <module name="observer.main" />
