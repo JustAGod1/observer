@@ -15,7 +15,7 @@ pipelines:
           script:
             - gradle build unpackDist
             - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
-            - docker build -t observer/$BITBUCKET_BUILD_NUMBER
+            - docker build -t observer/$BITBUCKET_BUILD_NUMBER .
             - docker push observer/$BITBUCKET_BUILD_NUMBER
           after-script:
             - pipe: atlassian/checkstyle-report:0.3.0
