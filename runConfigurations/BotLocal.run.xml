@@ -2,10 +2,11 @@
   <configuration default="false" name="BotLocal" type="JetRunConfigurationType">
     <envs>
       <env name="BOT_TOKEN" value="OTM1MTU1MzAzMjUzNjgwMTYw.Ye6hPg.zPorJtMhdNXlpobUBt0acBRhgH8" />
-      <env name="GUILD_ID" value="935147865192431696" />
+      <env name="GUILD_ID" value="319248047886303232" />
       <env name="DATABASE_URL" value="jdbc:mysql://10.5.0.5:3306/bot" />
       <env name="DATABASE_USER" value="root" />
       <env name="DATABASE_PASSWORD" value="qwerty" />
+      <env name="SETTINGS_CHANNEL" value="935257953362120734" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="ru.justagod.observer.Main" />
     <module name="observer.main" />

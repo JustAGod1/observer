@@ -133,7 +133,10 @@ object TechSupportAugment : ObserverAugment, ListenerAdapter() {
         }
 
         val channel = channel.createThreadChannel("ticket-$id", true)
-            .also { it.setAutoArchiveDuration(ThreadChannel.AutoArchiveDuration.TIME_24_HOURS) }.complete()
+            .also {
+                it.setAutoArchiveDuration(ThreadChannel.AutoArchiveDuration.TIME_24_HOURS)
+                it.setInvitable(false)
+            }.complete()
 
 
         val message = MessageBuilder()
