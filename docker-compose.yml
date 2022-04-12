@@ -1,0 +1,10 @@
+services:
+  observer:
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_USER=${DATABASE_USER}
+      - SETTINGS_CHANNEL=${SETTINGS_CHANNEL}
+      - GUILD_ID=${GUILD_ID}
+    image: justagod/stalcraft-bot
+

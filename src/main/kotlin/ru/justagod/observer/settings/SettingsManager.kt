@@ -12,7 +12,7 @@ import kotlin.system.measureNanoTime
 
 object SettingsManager : ObserverAugment, ListenerAdapter(){
 
-    private const val settingsChannel = "935182057838104606"
+    private val settingsChannel = System.getenv("SETTINGS_CHANNEL")!!
     private lateinit var jda : JDA
     private lateinit var channel: TextChannel
 

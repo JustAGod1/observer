@@ -6,8 +6,10 @@ import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import ru.justagod.observer.command.CommandManager
+import ru.justagod.observer.db.DatabaseManager
 import ru.justagod.observer.qna.TechSupportAugment
 import ru.justagod.observer.settings.SettingsManager
+import java.util.concurrent.Executors
 import java.util.logging.*
 
 object Main {
@@ -21,6 +23,8 @@ object Main {
 
     lateinit var jda: JDA
         private set
+
+    val service = Executors.newFixedThreadPool(4)!!
 
     init {
         System.setProperty("java.util.logging.SimpleFormatter.format", "[%1\$tF %1\$tT] [%3\$s] [%4\$s] %5\$s %n");
@@ -50,6 +54,9 @@ object Main {
     @JvmStatic
     fun main(args: Array<String>) {
         logger.fine("Started")
+        DatabaseManager.init()
+        logger.fine("Database initialized")
+
 
         val token = System.getenv("BOT_TOKEN")!!
 
