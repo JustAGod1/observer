@@ -20,12 +20,16 @@ import ru.justagod.observer.command.Command
 import ru.justagod.observer.command.CommandManager
 import ru.justagod.observer.db.DatabaseManager
 import ru.justagod.observer.settings.SettingsManager
+import java.time.Duration
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 object TechSupportAugment : ObserverAugment, ListenerAdapter() {
 
+    private val BAN_DURATION = Duration.of(5, ChronoUnit.MINUTES)
     private const val START_CONV_BUTTON_ID = "ts_start_conv"
     const val END_CONV_BUTTON_YES_ID = "ts_end_conv_yes"
     const val END_CONV_BUTTON_NO_ID = "ts_end_conv_no"
@@ -41,6 +45,19 @@ object TechSupportAugment : ObserverAugment, ListenerAdapter() {
         private set
 
     private val openTickets = ConcurrentHashMap<Long, ChannelState>()
+
+    private val ticketBans = hashMapOf<Long, Instant>()
+
+    @Synchronized
+    private fun memorizeTicketOpening(id: Long): Boolean {
+        val now = Instant.now()
+        val until = ticketBans[id]
+        if (until != null && until > now) return false
+
+        ticketBans[id] = now + BAN_DURATION
+
+        return true
+    }
 
     override fun init(jda: JDA): EventListener {
         CommandManager.registerCommand(CloseTicketCommand)
@@ -82,10 +99,16 @@ object TechSupportAugment : ObserverAugment, ListenerAdapter() {
     override fun onButtonClick(event: ButtonClickEvent) {
         when (event.componentId) {
             START_CONV_BUTTON_ID -> {
-                ticketsService.runCatching {
-                    startTicket(event.user)
+                if (memorizeTicketOpening(event.user.idLong)) {
+                    ticketsService.runCatching {
+                        startTicket(event.user)
+                    }
+                    event.reply("Обращение создано").setEphemeral(true).queue()
+                } else {
+                    event.reply("Вы не можете создавать обращения чаще чем раз в 2 часа")
+                        .setEphemeral(true)
+                        .queue()
                 }
-                event.reply("Обращение создано").setEphemeral(true).queue()
             }
             END_CONV_BUTTON_NO_ID -> {
                 ticketsService.runCatching {
@@ -141,7 +164,7 @@ object TechSupportAugment : ObserverAugment, ListenerAdapter() {
 
         val message = MessageBuilder()
             .append(user)
-            .append(",")
+            .append(", ")
             .append(SettingsManager.getPreference(ST_START_TICKET))
             .build()
 
