@@ -66,7 +66,7 @@ object Main {
         jda = JDABuilder.createDefault(token)
             .build()
 
-        jda.presence.setPresence(OnlineStatus.ONLINE, Activity.streaming("", "https://github.com/JustAGod1/observer"))
+        jda.presence.setPresence(OnlineStatus.ONLINE, Activity.streaming("Bot repo", "https://github.com/JustAGod1/observer"))
 
         jda.addEventListener(object : ListenerAdapter() {
             override fun onReady(event: ReadyEvent) {
