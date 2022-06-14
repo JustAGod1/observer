@@ -45,7 +45,7 @@ object SettingsManager : ObserverAugment, ListenerAdapter(){
         for (message in messages) {
             val content = message.contentRaw
 
-            if (content.matches("[a-zA-Z_][0-9a-zA-Z_]*:(.|\\n)*".toRegex())) {
+            if (content.matches("[^:]+:(.|\\n)*".toRegex())) {
                 cache[content.substringBefore(":")] = content.substringAfter(':').trim()
             }
         }

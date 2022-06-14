@@ -37,8 +37,12 @@ object TechSupportAugment : ObserverAugment, ListenerAdapter() {
     private const val ST_START_CHANNEL_ID = "ts_start_channel"
     private const val ST_MESSAGE_CONTENT = "ts_message_content"
     private const val ST_START_TICKET = "ts_ticket_start"
+    private const val ST_SUPPORT_ROLE = "ts_support_role"
 
     private lateinit var channel: TextChannel
+
+    lateinit var techSupportRole: Role
+        private set
 
     private val openTickets = ConcurrentHashMap<Long, ChannelState>()
 
@@ -58,6 +62,8 @@ object TechSupportAugment : ObserverAugment, ListenerAdapter() {
     override fun init(jda: JDA): EventListener {
         CommandManager.registerCommand(CloseTicketCommand)
         CommandManager.registerCommand(AssignTicketCommand)
+
+        techSupportRole = Main.guild.getRoleById(SettingsManager.getPreference(ST_SUPPORT_ROLE))!!
 
         publishInitMessage()
         return this

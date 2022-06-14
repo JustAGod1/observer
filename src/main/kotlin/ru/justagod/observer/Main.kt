@@ -10,6 +10,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 import ru.justagod.observer.command.CommandManager
 import ru.justagod.observer.db.DatabaseManager
 import ru.justagod.observer.qna.TechSupportAugment
+import ru.justagod.observer.reporter.ReportCommand
+import ru.justagod.observer.reporter.ReporterAugment
 import ru.justagod.observer.settings.SettingsManager
 import java.util.concurrent.Executors
 import java.util.logging.*
@@ -81,7 +83,8 @@ object Main {
         val augments = listOf(
             SettingsManager,
             CommandManager,
-            TechSupportAugment
+            TechSupportAugment,
+            ReporterAugment
         )
 
 
