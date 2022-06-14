@@ -1,7 +1,6 @@
 package ru.justagod.observer.command
 
 import net.dv8tion.jda.api.JDA
-import net.dv8tion.jda.api.events.message.GenericMessageEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.EventListener
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -28,6 +27,18 @@ object CommandManager : ObserverAugment, ListenerAdapter() {
         return this
     }
 
+    private fun checkPerm(commandName: String, event: MessageReceivedEvent): Boolean {
+        val user = event.member ?: return false
+        val groups = SettingsManager.getPreference("perm.$commandName").split(",").toSet()
+        if (groups.isEmpty()) {
+            Main.logger.finest("User ${event.author.name} has no permissions for command $commandName")
+            return false
+        }
+
+        return user.roles.any { it.id in groups }
+
+    }
+
     override fun onMessageReceived(event: MessageReceivedEvent) {
         if (event.guild.id == Main.guildId) {
             val content = event.message.contentRaw
@@ -36,7 +47,9 @@ object CommandManager : ObserverAugment, ListenerAdapter() {
                 val commandName = content.substringAfter(prefix).substringBefore(' ')
                 val command = commands[commandName] ?: return
 
-                command.execute(content.substringAfter(commandName), event.message)
+                if (checkPerm(commandName, event)) {
+                    command.execute(content.substringAfter(commandName), event.message)
+                }
             }
 
         }
