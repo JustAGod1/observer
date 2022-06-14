@@ -17,7 +17,7 @@ object ReportCommand : Command("tell", "report") {
             .build()
 
 
-        val channel = message.guild.getTextChannelById(target)
+        val channel = message.guild.getTextChannelById(target) ?: message.guild.getNewsChannelById(target)
 
         if (channel == null) {
             message.reply("Не удалось отправить сообщение. Канал не найден.").queue()
