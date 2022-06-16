@@ -8,14 +8,12 @@ import ru.justagod.observer.command.Command
 object ReportCommand : Command("tell", "report") {
     override fun execute(args: String, message: Message) {
         val target = args.substringBefore('\n').trim()
-        val text = message.contentRaw.substringAfter('\n').trim()
+        val text = message.contentRaw.substringAfter('\n', missingDelimiterValue = "").trim()
 
-        val newMessage = MessageBuilder(message)
-            .setContent(text)
-                // adds attachments from message
-
-            .build()
-
+        if (text.isBlank() && message.attachments.isEmpty()) {
+            message.reply("Не удалось отправить сообщение. Сообщение пустое").queue()
+            return
+        }
 
         val channel = message.guild.getTextChannelById(target) ?: message.guild.getNewsChannelById(target)
 
@@ -24,13 +22,26 @@ object ReportCommand : Command("tell", "report") {
             return
         }
 
-        val intent = channel.sendMessage(newMessage)
+        val intent = if (text.isBlank()) {
+            val intent = channel.sendFile(message.attachments.first().retrieveInputStream().get(), message.attachments.first().fileName)
 
-        message.attachments.forEach {
-            intent.addFile(it.retrieveInputStream().get(), it.fileName)
+            for (attachment in message.attachments.drop(1)) {
+                intent.addFile(attachment.retrieveInputStream().get(), attachment.fileName)
+            }
+            intent
+        } else {
+            val newMessage = MessageBuilder(message)
+                .setContent(text)
+                .build()
+            val intent = channel.sendMessage(newMessage)
+            message.attachments.forEach {
+                intent.addFile(it.retrieveInputStream().get(), it.fileName)
+            }
+
+            intent
         }
 
-        intent.queue()
+        intent.complete()
 
         message.reply("Сообщение отправлено").queue()
     }
